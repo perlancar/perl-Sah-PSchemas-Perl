@@ -21,16 +21,24 @@ sub get_args {
 }
 
 sub get_schema {
-    my ($class, %args) = @_;
+    my ($class, $args, $merge) = @_;
 
     return ['perl::modname', {
-        'x.completion' => ['perl_modname' => {ns_prefix=>$args{ns_prefix}}],
+        'x.completion' => ['perl_modname' => {ns_prefix=>$args->{ns_prefix}}],
+        %{ $merge || {} },
     }];
 }
 
 1;
-# ABSTRACT:
+# ABSTRACT: Perl module name (parameterized)
+
+=for Pod::Coverage ^(.+)$
 
 =head1 DESCRIPTION
 
 B<EXPERIMENTAL.>
+
+
+=head1 SEE ALSO
+
+L<Sah::Schema::perl::modname>
