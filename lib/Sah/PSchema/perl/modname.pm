@@ -8,14 +8,16 @@ package Sah::PSchema::perl::modname;
 use strict;
 use warnings;
 
-sub get_args {
+sub meta {
     my $class = shift;
 
     return +{
         v => 1,
-        ns_prefix => {
-            schema => 'perl::modname*',
-            default => '',
+        args => {
+            ns_prefix => {
+                schema => 'perl::modname*',
+                default => '',
+            },
         },
     };
 }
