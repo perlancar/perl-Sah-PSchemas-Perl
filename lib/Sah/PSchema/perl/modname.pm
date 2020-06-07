@@ -28,7 +28,7 @@ sub get_schema {
     return ['perl::modname', {
         'x.completion' => ['perl_modname' => {ns_prefix=>$args->{ns_prefix}}],
         %{ $merge || {} },
-    }];
+    }, {}];
 }
 
 1;
