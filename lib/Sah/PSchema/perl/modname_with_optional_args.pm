@@ -33,6 +33,13 @@ sub get_schema {
 1;
 # ABSTRACT: Perl module name with optional args (parameterized)
 
+=for Pod::Coverage ^(.+)$
+
+=head1 DESCRIPTION
+
+B<EXPERIMENTAL.>
+
+
 =head1 SEE ALSO
 
 L<Sah::Schema::perl::modname_with_optional_args>
