@@ -20,7 +20,7 @@ sub meta {
 }
 
 sub get_schema {
-    return ["perl::modname_with_optional_prefix" => {
+    return ["perl::modname_with_optional_args" => {
         'x.perl.coerce_rules' => [
             ['From_str::normalize_perl_modname' => {ns_prefix=>$args->{ns_prefix}}],
         ],
