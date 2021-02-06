@@ -18,10 +18,16 @@ sub meta {
                 schema => 'perl::modname*',
                 default => '',
             },
+            ns_prefixes => {
+                schema => 'perl::modname*',
+            },
             complete_recurse => {
                 summary => 'Whether completion should recurse',
                 schema => 'bool*',
             },
+        },
+        args_rels => {
+            choose_one => [qw/ns_prefix ns_prefixes/],
         },
     };
 }
@@ -31,10 +37,15 @@ sub get_schema {
 
     return ["perl::modname_with_optional_args" => {
         'x.perl.coerce_rules' => [
-            ['From_str::normalize_perl_modname' => {ns_prefix=>$args->{ns_prefix}}],
+            'From_str::normalize_perl_modname',
         ],
 
-        'x.completion' => ['perl_modname' => {ns_prefix=>$args->{ns_prefix}, recurse=>$args->{complete_recurse}, recurse_matching=>'all-at-once'}],
+        'x.completion' => ['perl_modname' => {
+            ($args->{ns_prefixes} ? (ns_prefixes => $args->{ns_prefixes}) : (ns_prefix => $args->{ns_prefix})),
+            recurse=>$args->{complete_recurse},
+            recurse_matching=>'all-at-once',
+        }],
+
         %{ $merge || {} },
     }, {}];
 }
