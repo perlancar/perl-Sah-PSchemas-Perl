@@ -33,6 +33,8 @@ sub meta {
 }
 
 sub get_schema {
+    require Sah::Schema::perl::modname_with_optional_args; # for scan_prereqs
+
     my ($class, $args, $merge) = @_;
 
     return ["perl::modname_with_optional_args" => {
