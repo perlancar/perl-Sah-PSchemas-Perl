@@ -1,12 +1,12 @@
 package Sah::PSchema::perl::modname_with_optional_args;
 
+use strict;
+use warnings;
+
 # AUTHORITY
 # DATE
 # DIST
 # VERSION
-
-use strict;
-use warnings;
 
 sub meta {
     my $class = shift;
@@ -27,19 +27,50 @@ sub meta {
             },
         },
         args_rels => {
-            choose_one => [qw/ns_prefix ns_prefixes/],
+            req_one => [qw/ns_prefix ns_prefixes/],
         },
     };
 }
 
 sub get_schema {
-    require Sah::Schema::perl::modname_with_optional_args; # for scan_prereqs
+    # we follow Sah::Schema::perl::modname_with_optional_args
+    require Regexp::Pattern::Perl::Module;
 
     my ($class, $args, $merge) = @_;
 
-    return ["perl::modname_with_optional_args" => {
+
+    my $schema_str = [str => {
+        match => '\\A(?:' . $Regexp::Pattern::Perl::Module::RE{perl_modname_with_optional_args}{pat} . ')\\z',
         'x.perl.coerce_rules' => [
-            'From_str::normalize_perl_modname',
+            ['From_str::normalize_perl_modname', {
+                ($args->{ns_prefixes} ? (ns_prefixes => $args->{ns_prefixes}) : (ns_prefix => $args->{ns_prefix})),
+            }],
+        ],
+        'x.completion' => ['perl_modname', {
+            ($args->{ns_prefixes} ? (ns_prefixes => $args->{ns_prefixes}) : (ns_prefix => $args->{ns_prefix})),
+            recurse=>$args->{complete_recurse},
+            recurse_matching=>'all-at-once',
+        }],
+    }];
+
+    my $schema_ary = [array_from_json => {
+        min_len => 1,
+        max_len => 2,
+        elems => [
+            $schema_str,
+            ["any", {
+                req=>1,
+                of=>[
+                    ["array",{req=>1}],
+                    ["hash",{req=>1}]],
+            }],
+        ],
+    }];
+
+    return ["any", {
+        of => [
+            $schema_ary,
+            $schema_str,
         ],
 
         'x.completion' => ['perl_modname' => {

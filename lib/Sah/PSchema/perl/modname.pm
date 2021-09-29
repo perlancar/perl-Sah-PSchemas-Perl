@@ -1,12 +1,12 @@
 package Sah::PSchema::perl::modname;
 
+use strict;
+use warnings;
+
 # AUTHORITY
 # DATE
 # DIST
 # VERSION
-
-use strict;
-use warnings;
 
 sub meta {
     my $class = shift;
